@@ -1,14 +1,26 @@
+import cssInjectedByJsPlugin  from "vite-plugin-css-injected-by-js"
+import { createHtmlPlugin }   from "vite-plugin-html"
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+  base: '',
+  build: 
+  { minify:  'terser',
+    terserOptions: 
+    { output: { comments: false } },
+  },
+  plugins:
+  [ vue(),
+    cssInjectedByJsPlugin(),
+    createHtmlPlugin({ minify: true }),
+  ],
+  resolve:
+  { alias: 
+    { '@':      fileURLToPath(new URL('./src',                  import.meta.url)),
+      '/css':   fileURLToPath(new URL('./src/css',              import.meta.url)),
+      'config': fileURLToPath(new URL('./src/css/_config.scss', import.meta.url)),
     }
-  }
+  },
 })
